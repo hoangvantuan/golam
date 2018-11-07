@@ -37,6 +37,7 @@ args[5]: aws region
 args[0]: lambda function name
 args[1]: source code path
 args[2]: aws region
+```
 
 3. update and publish new version
 
