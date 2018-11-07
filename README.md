@@ -6,66 +6,32 @@
 go get github.com/mdshun/golam
 ```
 
-## Usage:
+## Usage
 
-golam [global options] command [command options][arguments...]
+```
+NAME:
+   Auto deploy lambda@edge function cmd - A new cli application
 
-## Commands:
+USAGE:
+   golam [global options] command [command options] [arguments...]
 
-help, h Shows a list of commands or help for one command
+VERSION:
+   0.0.1
+
+COMMANDS:
+     deploy   publish new lambda@edge version and connect to cloudfront distribution
+     update   update lambda function, publish new version from source
+     help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-
-1. update lambda function and configure with cloudfront
-
-`--all, -a`
-
+   --distribution value, -d value      cloudfront dítribution id
+   --even-type value, --et value       event type of cloudfront distribution
+   --lambda-version value, --lv value  version of lambda function
+   --name value, -n value              name of lambda function
+   --path value, -p value              lambda source code path directory
+   --path-pattern value, --pt value    path pattern of cloudfront distribution
+   --publish-new-version, --pnv        event type of cloudfront distribution
+   --region value, -r value            aws region
+   --help, -h                          show help
+   --version, -v                       print the version
 ```
-args[0]: lambda function name
-args[1]: source code path
-args[2]: distribution id
-args[3]: path pattern
-args[4]: event type
-args[5]: aws region
-```
-
-2. update lambda function
-
-`--update, -u`
-
-```
-args[0]: lambda function name
-args[1]: source code path
-args[2]: aws region
-```
-
-3. update and publish new version
-
-`--publish, -p`
-
-```
-args[0]: lambda function name
-args[1]: source code path
-args[2]: aws region
-```
-
-4. configure latest version of lambda for cloudfront
-
-`--setup, -s`
-
-```
-args[0]: distribution id
-args[1]: path pattern
-args[2]: event type
-args[3]: lambda function name
-args[4]: setting version
-args[5]: aws region
-```
-
-5. show help
-
-`--help, -h`
-
-6. print the version
-
-`--version, -v`
