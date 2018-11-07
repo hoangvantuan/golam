@@ -36,14 +36,19 @@ args[5]: aws region
 ```
 args[0]: lambda function name
 args[1]: source code path
-args[5]: aws region
---publish, -p update and publish new version
+args[2]: aws region
+
+3. update and publish new version
+
+`--publish, -p`
+
+```
 args[0]: lambda function name
 args[1]: source code path
-args[5]: aws region
+args[2]: aws region
 ```
 
-3. configure latest version of lambda for cloudfront
+4. configure latest version of lambda for cloudfront
 
 `--setup, -s`
 
@@ -56,10 +61,10 @@ args[4]: setting version
 args[5]: aws region
 ```
 
-4. show help
+5. show help
 
 `--help, -h`
 
-5. print the version
+6. print the version
 
 `--version, -v`
