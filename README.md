@@ -35,3 +35,25 @@ GLOBAL OPTIONS:
    --help, -h                          show help
    --version, -v                       print the version
 ```
+
+## Samples
+
+### Update lambda function publish new version
+```
+golam update -n name-lambda-fuction -r [region] -p path-to-source-code --pnv
+```
+### Update lambda function no publish new version
+```
+golam update -n name-lambda-fuction -r [region] -p path-to-source-code
+```
+
+### Update Cloudfront with specify lambda@edge version
+```
+golam deploy -n lambda-function-name -r [region]  -d distribution-id --pt path-pattern --et event-type -lv lambda-function-version
+```
+
+### Pushish new lambda@edge version and deploy to cloudfront
+```
+golam deploy -n lambda-function-name -r [region]  -d distribution-id --pt path-pattern --et event-type -p lambda-function-path
+```
+
