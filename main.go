@@ -107,7 +107,7 @@ func main() {
 					Name:  "region, r",
 					Usage: "aws region",
 				},
-				cli.BoolTFlag{
+				cli.BoolFlag{
 					Name:  "publish-new-version, pnv",
 					Usage: "event type of cloudfront distribution",
 				},
