@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -45,6 +46,9 @@ func updateFunctionCode(lambdaFnName, path string, isPublish bool) (*lambda.Func
 		fmt.Println(err)
 		return nil, err
 	}
+
+	// remove all file after deploy
+	defer os.RemoveAll(zipFilePath)
 
 	zipFile, err := ioutil.ReadFile(zipFilePath)
 
