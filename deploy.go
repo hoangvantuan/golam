@@ -21,7 +21,7 @@ func Deploy(ctx *cli.Context) error {
 		err := updateCloudFront(flags.Distribution, flags.PathPattern, flags.EventType, flags.Name, flags.Version)
 
 		if err != nil {
-			log.Fatalf("deploy function failure %s", err)
+			log.Printf("deploy function failure %s", err)
 		}
 
 		return err
@@ -31,20 +31,18 @@ func Deploy(ctx *cli.Context) error {
 		cfg, err := updateFunctionCode(flags.Name, flags.Path, true)
 
 		if err != nil {
-			log.Fatalf("update function code failure %s", err)
+			log.Printf("update function code failure %s", err)
 			return err
 		}
 
 		err = updateCloudFront(flags.Distribution, flags.PathPattern, flags.EventType, flags.Name, *cfg.Version)
 
 		if err != nil {
-			log.Fatalf("deploy function failure %s", err)
+			log.Printf("deploy function failure %s", err)
 		}
 
 		return err
 	}
-
-	log.Fatalln("command not found")
 
 	return fmt.Errorf("command not found")
 

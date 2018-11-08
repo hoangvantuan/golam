@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/urfave/cli"
 )
 
@@ -25,6 +27,7 @@ func (f *Flags) Scan(ctx *cli.Context) *Flags {
 	f.PathPattern = ctx.String("path-pattern")
 	f.EventType = ctx.String("event-type")
 	f.Region = ctx.String("region")
+	f.IsNewVersion = ctx.Bool("publish-new-version")
 
 	return f
 }
@@ -36,10 +39,11 @@ func (f *Flags) IsSetupFromSourceCode() bool {
 
 // IsSetupFromVersion is setup cloud front from lambda@edge from version
 func (f *Flags) IsSetupFromVersion() bool {
-	return !f.IsSetupFromSourceCode() && f.Name != "" && f.Distribution != "" && f.Version != "" && f.PathPattern != "" && f.EventType != ""
+	return f.Path == "" && f.Name != "" && f.Distribution != "" && f.Version != "" && f.PathPattern != "" && f.EventType != ""
 }
 
 // IsUpdateFunctionCode is update function code
 func (f *Flags) IsUpdateFunctionCode() bool {
+	fmt.Printf("%s %s", f.Name, f.Path)
 	return f.Name != "" && f.Path != ""
 }

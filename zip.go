@@ -1,70 +1,24 @@
 package main
 
 import (
-	"archive/zip"
-	"io"
+	"fmt"
 	"os"
-	"path/filepath"
-	"strings"
+	"os/exec"
 )
 
-func zipit(source, target string) error {
-	zipfile, err := os.Create(target)
+func zip(source, target string) error {
+	// remove file before zip
+	os.Remove(target)
+
+	cmd := exec.Command("zip", "-r", target, "./")
+	cmd.Dir = source
+
+	stdoutStderr, err := cmd.CombinedOutput()
+	fmt.Printf("%s\n", string(stdoutStderr))
+
 	if err != nil {
 		return err
 	}
-	defer zipfile.Close()
 
-	archive := zip.NewWriter(zipfile)
-	defer archive.Close()
-
-	info, err := os.Stat(source)
-	if err != nil {
-		return nil
-	}
-
-	var baseDir string
-	if info.IsDir() {
-		baseDir = filepath.Base(source)
-	}
-
-	filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		header, err := zip.FileInfoHeader(info)
-		if err != nil {
-			return err
-		}
-
-		if baseDir != "" {
-			header.Name = filepath.Join(baseDir, strings.TrimPrefix(path, source))
-		}
-
-		if info.IsDir() {
-			header.Name += "/"
-		} else {
-			header.Method = zip.Deflate
-		}
-
-		writer, err := archive.CreateHeader(header)
-		if err != nil {
-			return err
-		}
-
-		if info.IsDir() {
-			return nil
-		}
-
-		file, err := os.Open(path)
-		if err != nil {
-			return err
-		}
-		defer file.Close()
-		_, err = io.Copy(writer, file)
-		return err
-	})
-
-	return err
+	return nil
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"path/filepath"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/lambda"
@@ -20,13 +21,11 @@ func Update(ctx *cli.Context) error {
 		_, err := updateFunctionCode(flags.Name, flags.Path, flags.IsNewVersion)
 
 		if err != nil {
-			log.Fatalf("deploy function failure %s", err)
+			log.Printf("deploy function failure %s", err)
 		}
 
 		return err
 	}
-
-	log.Fatalln("command not found")
 
 	return fmt.Errorf("command not found")
 }
@@ -38,7 +37,16 @@ func updateFunctionCode(lambdaFnName, path string, isPublish bool) (*lambda.Func
 	log.Printf("[info] source code %s", path)
 	log.Printf("[info] lambda function name: %s", lambdaFnName)
 
-	zip, err := ioutil.ReadFile(path)
+	zipFilePath := filepath.Join(path, "index.zip")
+
+	err := zip(path, zipFilePath)
+
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	zipFile, err := ioutil.ReadFile(zipFilePath)
 
 	if err != nil {
 		fmt.Println(err)
@@ -47,7 +55,7 @@ func updateFunctionCode(lambdaFnName, path string, isPublish bool) (*lambda.Func
 
 	input := &lambda.UpdateFunctionCodeInput{
 		FunctionName: aws.String(lambdaFnName),
-		ZipFile:      zip,
+		ZipFile:      zipFile,
 		Publish:      aws.Bool(isPublish),
 	}
 

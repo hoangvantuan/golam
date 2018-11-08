@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"os"
-	"sort"
 
 	"github.com/urfave/cli"
 )
@@ -14,24 +13,6 @@ func main() {
 	app.Name = "Auto deploy lambda@edge function cmd"
 	app.Version = "0.0.1"
 
-	// register command
-	app.Commands = []cli.Command{
-		{
-			Name:  "deploy",
-			Usage: "publish new lambda@edge version and connect to cloudfront distribution",
-			Action: func(c *cli.Context) error {
-				return Deploy(c)
-			},
-		},
-		{
-			Name:  "update",
-			Usage: "update lambda function, publish new version from source",
-			Action: func(c *cli.Context) error {
-				return Update(c)
-			},
-		},
-	}
-
 	// register flag
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
@@ -40,7 +21,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "distribution, d",
-			Usage: "cloudfront dítribution id",
+			Usage: "cloudfront distribution id",
 		},
 		cli.StringFlag{
 			Name:  "path, p",
@@ -68,8 +49,71 @@ func main() {
 		},
 	}
 
-	sort.Sort(cli.FlagsByName(app.Flags))
-	sort.Sort(cli.CommandsByName(app.Commands))
+	// register command
+	app.Commands = []cli.Command{
+		{
+			Name:  "deploy",
+			Usage: "publish new lambda@edge version and connect to cloudfront distribution",
+			Action: func(c *cli.Context) error {
+				return Deploy(c)
+			},
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "name, n",
+					Usage: "name of lambda function",
+				},
+				cli.StringFlag{
+					Name:  "distribution, d",
+					Usage: "cloudfront distribution id",
+				},
+				cli.StringFlag{
+					Name:  "path, p",
+					Usage: "lambda source code path directory",
+				},
+				cli.StringFlag{
+					Name:  "lambda-version, lv",
+					Usage: "version of lambda function",
+				},
+				cli.StringFlag{
+					Name:  "path-pattern, pt",
+					Usage: "path pattern of cloudfront distribution",
+				},
+				cli.StringFlag{
+					Name:  "event-type, et",
+					Usage: "event type of cloudfront distribution",
+				},
+				cli.StringFlag{
+					Name:  "region, r",
+					Usage: "aws region",
+				},
+			},
+		},
+		{
+			Name:  "update",
+			Usage: "update lambda function, publish new version from source",
+			Action: func(c *cli.Context) error {
+				return Update(c)
+			},
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "name, n",
+					Usage: "name of lambda function",
+				},
+				cli.StringFlag{
+					Name:  "path, p",
+					Usage: "lambda source code path directory",
+				},
+				cli.StringFlag{
+					Name:  "region, r",
+					Usage: "aws region",
+				},
+				cli.BoolTFlag{
+					Name:  "publish-new-version, pnv",
+					Usage: "event type of cloudfront distribution",
+				},
+			},
+		},
+	}
 
 	err := app.Run(os.Args)
 	if err != nil {
